@@ -82,7 +82,7 @@
   {% if message %}
   <p class="alert">{{ message }}</p>
   {% endif %}
-  <form method="POST" action="{{ url_for('login') }}">
+  <form method="POST" action="{{ url_for('auth.login') }}">
     <div class="form-group">
       <label for="username">姓名</label>
       <input type="text" id="username" name="username" required>

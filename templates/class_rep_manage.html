@@ -125,9 +125,9 @@
 
 {% if view_mode == 'time' %}
 <div class="button-container">
-    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='time') }}'">按提交时间查看</button>
-    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='summary') }}'">按总表查看</button>
-    <button onclick="window.location.href='{{ url_for('enter_as_student') }}'">提交作业</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.manage', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.manage', view_mode='summary') }}'">按总表查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.enter_as_student') }}'">提交作业</button>
 </div>
 <h3>按提交时间倒序查看</h3>
 {% if homework_data %}
@@ -154,9 +154,9 @@
 {% elif view_mode == 'summary' %}
 <!-- 导出Excel按钮 -->
 <div class="button-container">
-    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='time') }}'">按提交时间查看</button>
-    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='summary') }}'">按总表查看</button>
-    <button onclick="window.location.href='{{ url_for('enter_as_student') }}'">提交作业</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.manage', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.manage', view_mode='summary') }}'">按总表查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep.enter_as_student') }}'">提交作业</button>
     <button onclick="exportTableToExcel('homework_summary.xlsx')">导出作业表格</button>
 </div>
 <h3>总表查看</h3>

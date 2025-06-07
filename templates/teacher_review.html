@@ -73,8 +73,8 @@
 <h1>教师批阅作业</h1>
 
 <div>
-    <button onclick="window.location.href='{{ url_for('teacher_review', view_mode='time') }}'">按提交时间查看</button>
-    <button onclick="window.location.href='{{ url_for('teacher_review', view_mode='summary') }}'">按总表查看</button>
+    <button onclick="window.location.href='{{ url_for('teacher.review', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('teacher.review', view_mode='summary') }}'">按总表查看</button>
 </div>
 
 {% if view_mode == 'time' %}
@@ -94,7 +94,7 @@
         <td>{{ submission.student }}</td>
         <td>{{ submission.timestamp }}</td>
         <td>
-            <a href="{{ url_for('teacher_review_reply', homework_number=homework_number, student_name=submission.student) }}">
+            <a href="{{ url_for('teacher.review_reply', homework_number=homework_number, student_name=submission.student) }}">
                 查看/回复
             </a>
         </td>

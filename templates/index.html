@@ -112,7 +112,7 @@
     <p>欢迎 {{ user['name'] }}，请根据需要提交作业。</p>
     <div class="form-container">
         {% if user['id'] == '202303174' or user['id'] == '202303130' %}
-        <form action="{{ url_for('set_role_classrep') }}" method="post">
+        <form action="{{ url_for('class_rep.set_role_classrep') }}" method="post">
             <button type="submit" class="btn">返回课代表统计</button>
         </form>
         {% endif %}
@@ -134,9 +134,9 @@
             <td>{{content[homework_number]}}</td>
             <td>
                 {% if submissions %}
-                <a href="{{ url_for('view_homework', homework_number=homework_number) }}" class="btn">查看</a>
+                <a href="{{ url_for('student.view_homework', homework_number=homework_number) }}" class="btn">查看</a>
                 {% else %}
-                <a href="{{ url_for('submit_homework', homework_number=homework_number) }}" class="btn">提交</a>
+                <a href="{{ url_for('student.submit_homework', homework_number=homework_number) }}" class="btn">提交</a>
                 {% endif %}
             </td>
         </tr>

@@ -1,2 +1,7 @@
 /homework_data.json
 /users.json
+/app.log
+/logs/
+/static/
+
+/.idea/
