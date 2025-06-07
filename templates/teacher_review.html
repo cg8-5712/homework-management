@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师批阅作业</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        div {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .no-data {
+            color: #888;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>教师批阅作业</h1>
+
+<div>
+    <button onclick="window.location.href='{{ url_for('teacher_review', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('teacher_review', view_mode='summary') }}'">按总表查看</button>
+</div>
+
+{% if view_mode == 'time' %}
+<h3>按提交时间倒序查看</h3>
+{% if homework_data %}
+<table border="1">
+    <tr>
+        <th>作业编号</th>
+        <th>学生姓名</th>
+        <th>提交时间</th>
+        <th>查看内容</th>
+    </tr>
+    {% for homework_number, submissions in homework_data.items() %}
+    {% for submission in submissions %}
+    <tr>
+        <td>{{ homework_number }}</td>
+        <td>{{ submission.student }}</td>
+        <td>{{ submission.timestamp }}</td>
+        <td>
+            <a href="{{ url_for('teacher_review_reply', homework_number=homework_number, student_name=submission.student) }}">
+                查看/回复
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+{% else %}
+<p class="no-data">没有作业提交记录</p>
+{% endif %}
+
+{% elif view_mode == 'summary' %}
+<h3>总表查看</h3>
+<table border="1">
+    <tr>
+        <th>学生姓名</th>
+        {% for i in range(1, n+1) %}
+        <th>作业 {{ i }}</th>
+        {% endfor %}
+    </tr>
+    {% for student in summary_table %}
+    <tr>
+        <td>{{ student.student_name }}</td>
+        {% for submission in student.submissions %}
+        <td>{{ submission | safe }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+</body>
+</html>

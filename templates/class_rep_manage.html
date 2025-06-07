@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+
+ **************************************************************
+ *                                                            *
+ *   .=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.       *
+ *    |                     ______                     |      *
+ *    |                  .-"      "-.                  |      *
+ *    |                 /            \                 |      *
+ *    |     _          |              |          _     |      *
+ *    |    ( \         |,  .-.  .-.  ,|         / )    |      *
+ *    |     > "=._     | )(__/  \__)( |     _.=" <     |      *
+ *    |    (_/"=._"=._ |/     /\     \| _.="_.="\_)    |      *
+ *    |           "=._"(_     ^^     _)"_.="           |      *
+ *    |               "=\__|IIIIII|__/="               |      *
+ *    |              _.="| \IIIIII/ |"=._              |      *
+ *    |    _     _.="_.="\          /"=._"=._     _    |      *
+ *    |   ( \_.="_.="     `--------`     "=._"=._/ )   |      *
+ *    |    > _.="                            "=._ <    |      *
+ *    |   (_/                                    \_)   |      *
+ *    |                                                |      *
+ *    '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-='      *
+ *                                                            *
+ *           LASCIATE OGNI SPERANZA, VOI CH'ENTRATE           *
+ **************************************************************
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课代表管理作业</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .submitted {
+            background-color: rgba(255, 235, 59, 0.55);  /* 黄色背景 */
+        }
+
+        .no-records {
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            table {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+<h1>课代表管理作业</h1>
+
+
+
+{% if view_mode == 'time' %}
+<div class="button-container">
+    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='summary') }}'">按总表查看</button>
+    <button onclick="window.location.href='{{ url_for('enter_as_student') }}'">提交作业</button>
+</div>
+<h3>按提交时间倒序查看</h3>
+{% if homework_data %}
+<table>
+    <tr>
+        <th>作业编号</th>
+        <th>学生姓名</th>
+        <th>提交时间</th>
+    </tr>
+    {% for homework_number, submissions in homework_data.items() %}
+    {% for submission in submissions %}
+    <tr>
+        <td>{{ homework_number }}</td>
+        <td>{{ submission.student }}</td>
+        <td>{{ submission.timestamp }}</td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+</table>
+{% else %}
+<p class="no-records">没有作业提交记录</p>
+{% endif %}
+
+{% elif view_mode == 'summary' %}
+<!-- 导出Excel按钮 -->
+<div class="button-container">
+    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='time') }}'">按提交时间查看</button>
+    <button onclick="window.location.href='{{ url_for('class_rep_manage', view_mode='summary') }}'">按总表查看</button>
+    <button onclick="window.location.href='{{ url_for('enter_as_student') }}'">提交作业</button>
+    <button onclick="exportTableToExcel('homework_summary.xlsx')">导出作业表格</button>
+</div>
+<h3>总表查看</h3>
+<table id="homework-summary">
+    <tr>
+        <th>学生姓名</th>
+        {% for i in range(1, n+1) %}
+        <th>作业 {{ i }}</th>
+        {% endfor %}
+    </tr>
+    {% for student in summary_table %}
+    <tr>
+        <td>{{ student.student_name }}</td>
+        {% for submission in student.submissions %}
+        <td class="{% if submission and submission != '未提交' %}submitted{% endif %}">
+            {{ submission if submission != '未提交' else '未提交' }}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<script>
+    function exportTableToExcel(filename) {
+        var table = document.getElementById("homework-summary");
+        var wb = XLSX.utils.table_to_book(table, { sheet: "作业总表" });
+        // 导出为Excel文件
+        XLSX.writeFile(wb, filename);
+    }
+</script>
+
+</body>
+</html>

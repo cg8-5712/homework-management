@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative; /* 添加相对定位，使子元素可以绝对定位 */
+    }
+    .login-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .form-group input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-group input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    .alert {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+    }
+    /* 添加版本更新内容的样式 */
+    .version-info {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: opacity 0.5s ease; /* 添加过渡效果 */
+    }
+    .version-info.close {
+      opacity: 0;
+      pointer-events: none; /* 确保点击事件在动画过程中不起作用 */
+    }
+  </style>
+</head>
+<body>
+<div class="version-info" onclick="closeVersionItem(this)">
+  <div class="version-item">版本1.1.5<br>更新内容：<br>1. 添加作业内容显示；<br>2. 课代表端可一键导出同学作业提交名单；<br>3. 优化了用户体验。</div>
+</div>
+
+<div class="login-container">
+  <h2>登录</h2>
+  {% if message %}
+  <p class="alert">{{ message }}</p>
+  {% endif %}
+  <form method="POST" action="{{ url_for('login') }}">
+    <div class="form-group">
+      <label for="username">姓名</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+      <label for="text">学号</label>
+      <input type="text" id="password" name="password" required>
+    </div>
+    <div class="form-group">
+      <input type="submit" value="登录">
+    </div>
+  </form>
+</div>
+
+<script>
+  function closeVersionItem(element) {
+    element.classList.add('close');
+    // 添加一个延时函数，确保动画结束后再隐藏元素
+    setTimeout(() => {
+      element.style.display = 'none';
+    }, 170); // 500ms 是与 transition 时间匹配的
+  }
+</script>
+</body>
+</html>

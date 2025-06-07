@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<!--
+/***
+*          .,:,,,                                        .::,,,::.
+*        .::::,,;;,                                  .,;;:,,....:i:
+*        :i,.::::,;i:.      ....,,:::::::::,....   .;i:,.  ......;i.
+*        :;..:::;::::i;,,:::;:,,,,,,,,,,..,.,,:::iri:. .,:irsr:,.;i.
+*        ;;..,::::;;;;ri,,,.                    ..,,:;s1s1ssrr;,.;r,
+*        :;. ,::;ii;:,     . ...................     .;iirri;;;,,;i,
+*        ,i. .;ri:.   ... ............................  .,,:;:,,,;i:
+*        :s,.;r:... ....................................... .::;::s;
+*        ,1r::. .............,,,.,,:,,........................,;iir;
+*        ,s;...........     ..::.,;:,,.          ...............,;1s
+*       :i,..,.              .,:,,::,.          .......... .......;1,
+*      ir,....:rrssr;:,       ,,.,::.     .r5S9989398G95hr;. ....,.:s,
+*     ;r,..,s9855513XHAG3i   .,,,,,,,.  ,S931,.,,.;s;s&BHHA8s.,..,..:r:
+*    :r;..rGGh,  :SAG;;G@BS:.,,,,,,,,,.r83:      hHH1sXMBHHHM3..,,,,.ir.
+*   ,si,.1GS,   sBMAAX&MBMB5,,,,,,:,,.:&8       3@HXHBMBHBBH#X,.,,,,,,rr
+*   ;1:,,SH:   .A@&&B#&8H#BS,,,,,,,,,.,5XS,     3@MHABM&59M#As..,,,,:,is,
+*  .rr,,,;9&1   hBHHBB&8AMGr,,,,,,,,,,,:h&&9s;   r9&BMHBHMB9:  . .,,,,;ri.
+*  :1:....:5&XSi;r8BMBHHA9r:,......,,,,:ii19GG88899XHHH&GSr.      ...,:rs.
+*  ;s.     .:sS8G8GG889hi.        ....,,:;:,.:irssrriii:,.        ...,,i1,
+*  ;1,         ..,....,,isssi;,        .,,.                      ....,.i1,
+*  ;h:               i9HHBMBBHAX9:         .                     ...,,,rs,
+*  ,1i..            :A#MBBBBMHB##s                             ....,,,;si.
+*  .r1,..        ,..;3BMBBBHBB#Bh.     ..                    ....,,,,,i1;
+*   :h;..       .,..;,1XBMMMMBXs,.,, .. :: ,.               ....,,,,,,ss.
+*    ih: ..    .;;;, ;;:s58A3i,..    ,. ,.:,,.             ...,,,,,:,s1,
+*    .s1,....   .,;sh,  ,iSAXs;.    ,.  ,,.i85            ...,,,,,,:i1;
+*     .rh: ...     rXG9XBBM#M#MHAX3hss13&&HHXr         .....,,,,,,,ih;
+*      .s5: .....    i598X&&A&AAAAAA&XG851r:       ........,,,,:,,sh;
+*      . ihr, ...  .         ..                    ........,,,,,;11:.
+*         ,s1i. ...  ..,,,..,,,.,,.,,.,..       ........,,.,,.;s5i.
+*          .:s1r,......................       ..............;shs,
+*          . .:shr:.  ....                 ..............,ishs.
+*              .,issr;,... ...........................,is1s;.
+*                 .,is1si;:,....................,:;ir1sr;,
+*                    ..:isssssrrii;::::::;;iirsssssr;:..
+*                         .,::iiirsssssssssrri;;:.
+*/
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生作业提交</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .alert {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .form-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>英语寒假作业提交</h1>
+    <p>欢迎 {{ user['name'] }}，请根据需要提交作业。</p>
+    <div class="form-container">
+        {% if user['id'] == '202303174' or user['id'] == '202303130' %}
+        <form action="{{ url_for('set_role_classrep') }}" method="post">
+            <button type="submit" class="btn">返回课代表统计</button>
+        </form>
+        {% endif %}
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>作业编号</th>
+            <th>状态</th>
+            <th>内容</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for homework_number, submissions in homework_data.items() %}
+        <tr>
+            <td>{{ homework_number }}</td>
+            <td>{{ '已提交' if submissions else '未提交' }}{{'未批改' if is_corect else '已批改'}}</td>
+            <td>{{content[homework_number]}}</td>
+            <td>
+                {% if submissions %}
+                <a href="{{ url_for('view_homework', homework_number=homework_number) }}" class="btn">查看</a>
+                {% else %}
+                <a href="{{ url_for('submit_homework', homework_number=homework_number) }}" class="btn">提交</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

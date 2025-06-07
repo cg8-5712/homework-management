@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+
+/***
+ *
+ *   █████▒█    ██  ▄████▄   ██ ▄█▀       ██████╗ ██╗   ██╗ ██████╗
+ * ▓██   ▒ ██  ▓██▒▒██▀ ▀█   ██▄█▒        ██╔══██╗██║   ██║██╔════╝
+ * ▒████ ░▓██  ▒██░▒▓█    ▄ ▓███▄░        ██████╔╝██║   ██║██║  ███╗
+ * ░▓█▒  ░▓▓█  ░██░▒▓▓▄ ▄██▒▓██ █▄        ██╔══██╗██║   ██║██║   ██║
+ * ░▒█░   ░▒█████▓ ▒ ▓███▀ ░▒██▒ █▄       ██████╔╝╚██████╔╝╚██████╔╝
+ *  ▒ ░   ░▒▓▒ ▒ ▒ ░ ░▒ ▒  ░▒ ▒▒ ▓▒       ╚═════╝  ╚═════╝  ╚═════╝
+ *  ░     ░░▒░ ░ ░   ░  ▒   ░ ░▒ ▒░
+ *  ░ ░    ░░░ ░ ░ ░        ░ ░░ ░
+ *           ░     ░ ░      ░  ░
+ */
+
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师批阅作业 - 回复</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1, h2, h3, h4 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .form-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>教师批阅作业 - 回复</h1>
+
+    <h2>作业编号：{{ homework_number }}</h2>
+    <h3>作业内容：</h3> {{ content }}
+    <h3>学生：{{ student_name }}</h3>
+
+    <h4>提交内容：</h4>
+    {% for file in homework.file %}
+    <p>
+        <img src='/{{ file | replace("\\", "/") }}' alt="学生上传的文件" style="max-width: 100%; height: auto;">
+    </p>
+    {% endfor %}
+    <p>{{ homework.comment }}</p>
+
+    <h4>教师回复：</h4>
+    <p>{{ homework.teacher_reply if homework.teacher_reply else '暂无回复' }}</p>
+
+    <form method="POST" class="form-container">
+        <label for="reply">回复内容：</label>
+        <textarea id="reply" name="reply" rows="4" cols="50">{{ homework.teacher_reply if homework.teacher_reply else '' }}</textarea>
+        <input type="submit" value="提交回复">
+    </form>
+
+    <a href="{{ url_for('teacher_review') }}">返回批阅页面</a>
+</div>
+</body>
+</html>
